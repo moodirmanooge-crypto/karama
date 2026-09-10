@@ -192,7 +192,7 @@ export default function AdminSettings({ onProfileUpdate }) {
         <h3 className="font-[var(--font-display)] text-lg font-semibold text-navy-900">Profile-kaaga</h3>
 
         <div className="flex items-center gap-4">
-          <label className="flex h-16 w-16 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-dashed border-navy-900/20 bg-cream-dim">
+          <label className="flex h-16 w-16 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full border border-dashed border-navy-900/20 bg-cream-dim">
             {avatarPreview || profile.avatarUrl ? (
               <img src={avatarPreview || profile.avatarUrl} alt="Avatar" className="h-full w-full object-cover" />
             ) : (
@@ -316,9 +316,9 @@ export default function AdminSettings({ onProfileUpdate }) {
           <ul className="mt-4 space-y-3">
             {admins.map((a) => (
               <li key={a.id} className="rounded-sm border border-navy-900/5 p-2">
-                <div className="flex items-center justify-between gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-cream-dim">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full bg-cream-dim">
                       {a.avatarUrl ? (
                         <img src={a.avatarUrl} alt={a.username} className="h-full w-full object-cover" />
                       ) : (
@@ -337,13 +337,13 @@ export default function AdminSettings({ onProfileUpdate }) {
                   </div>
 
                   {isSuperAdmin && a.id !== session?.id && (
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <button
                         onClick={() => (editingId === a.id ? cancelEdit() : startEdit(a))}
                         title="Wax ka beddel"
                         className="flex items-center gap-1.5 rounded-sm bg-navy-900/5 px-2.5 py-1.5 text-xs font-medium text-navy-900/70 hover:bg-navy-900/10"
                       >
-                        <Pencil size={13} /> Wax ka beddel
+                        <Pencil size={13} /> <span className="hidden sm:inline">Wax ka beddel</span>
                       </button>
                       <button
                         onClick={() => toggleBlock(a.id, a.blocked)}

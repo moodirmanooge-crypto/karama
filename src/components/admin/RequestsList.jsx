@@ -37,8 +37,8 @@ export default function RequestsList() {
   if (requests.length === 0) return <p className="text-sm text-navy-900/50">Weli ma jiraan codsadayaal.</p>;
 
   return (
-    <div className="overflow-hidden rounded-sm border border-navy-900/10 bg-white">
-      <table className="w-full text-left text-sm">
+    <div className="overflow-x-auto rounded-sm border border-navy-900/10 bg-white">
+      <table className="w-full min-w-[640px] text-left text-sm">
         <thead className="bg-cream-dim text-xs uppercase tracking-wide text-navy-900/50">
           <tr>
             <th className="px-4 py-3 font-medium">Order #</th>

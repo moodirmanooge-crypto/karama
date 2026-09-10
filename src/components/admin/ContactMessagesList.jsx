@@ -23,9 +23,9 @@ export default function ContactMessagesList() {
     <div className="space-y-3">
       {items.map((it) => (
         <div key={it.id} className="rounded-sm border border-navy-900/10 bg-white p-4">
-          <div className="flex items-center justify-between">
-            <p className="font-medium text-navy-900">{it.name}</p>
-            <span className="flex items-center gap-1.5 text-xs text-navy-900/50">
+          <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
+            <p className="min-w-0 break-words font-medium text-navy-900">{it.name}</p>
+            <span className="flex shrink-0 items-center gap-1.5 text-xs text-navy-900/50">
               <Phone size={12} className="text-gold-500" /> {it.phone}
             </span>
           </div>

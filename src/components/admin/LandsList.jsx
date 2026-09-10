@@ -33,15 +33,15 @@ export default function LandsList() {
           </div>
           <div className="p-4">
             <div className="flex items-start justify-between gap-2">
-              <div>
-                <p className="font-[var(--font-display)] text-sm font-semibold text-navy-900">
+              <div className="min-w-0 flex-1">
+                <p className="font-[var(--font-display)] text-sm font-semibold text-navy-900 break-words">
                   {land.title || "Dhul aan magac lahayn"}
                 </p>
                 <p className="text-xs text-navy-900/50">{land.location}</p>
               </div>
               <button
                 onClick={() => remove(land.id)}
-                className="rounded-sm p-1.5 text-clay hover:bg-clay/10"
+                className="shrink-0 rounded-sm p-1.5 text-clay hover:bg-clay/10"
                 aria-label="Tirtir"
               >
                 <Trash2 size={16} />

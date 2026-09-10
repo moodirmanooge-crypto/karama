@@ -1,6 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { PlusCircle, LayoutGrid, Users, ClipboardList, MessageSquare, Settings, LogOut, UserCircle2 } from "lucide-react";
+import {
+  PlusCircle,
+  LayoutGrid,
+  Users,
+  ClipboardList,
+  MessageSquare,
+  Settings,
+  LogOut,
+  UserCircle2,
+  Menu,
+  X,
+} from "lucide-react";
 import { clearAdminSession, getAdminSession } from "../lib/adminSession";
 import AddLandForm from "../components/admin/AddLandForm";
 import LandsList from "../components/admin/LandsList";
@@ -22,6 +33,7 @@ const tabs = [
 export default function AdminDashboard() {
   const [active, setActive] = useState("add");
   const [refreshKey, setRefreshKey] = useState(0);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const navigate = useNavigate();
   const admin = getAdminSession();
 
@@ -30,22 +42,64 @@ export default function AdminDashboard() {
     navigate("/admin");
   };
 
+  const selectTab = (id) => {
+    setActive(id);
+    setSidebarOpen(false);
+  };
+
   return (
-    <div className="flex min-h-screen bg-cream-dim">
-      <aside className="flex w-60 flex-col bg-navy-950 text-cream">
-        <div className="flex items-center gap-2.5 px-5 py-6">
-          <img src={logo} alt="Karaamo" className="h-9 w-9 rounded-full object-cover" />
-          <div>
-            <p className="font-[var(--font-display)] text-sm font-semibold">KARAAMO</p>
-            <p className="text-xs text-cream/40">Admin Dashboard</p>
+    <div className="min-h-screen bg-cream-dim md:flex">
+      {/* Mobile top bar */}
+      <div className="sticky top-0 z-30 flex items-center justify-between bg-navy-950 px-4 py-3 text-cream md:hidden">
+        <div className="flex items-center gap-2.5">
+          <img src={logo} alt="Karaamo" className="h-8 w-8 rounded-full object-cover" />
+          <span className="font-[var(--font-display)] text-sm font-semibold">KARAAMO</span>
+        </div>
+        <button
+          onClick={() => setSidebarOpen(true)}
+          aria-label="Fur menu-ga"
+          className="rounded-sm p-1.5 text-cream/80 hover:bg-navy-800"
+        >
+          <Menu size={22} />
+        </button>
+      </div>
+
+      {/* Backdrop (mobile only, shown when sidebar is open) */}
+      {sidebarOpen && (
+        <div
+          onClick={() => setSidebarOpen(false)}
+          className="fixed inset-0 z-40 bg-navy-950/60 md:hidden"
+        />
+      )}
+
+      {/* Sidebar: overlay drawer on mobile, static column on desktop */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 max-w-[80vw] flex-col bg-navy-950 text-cream transition-transform duration-200 md:static md:z-auto md:w-60 md:max-w-none md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <div className="flex items-center justify-between px-5 py-6">
+          <div className="flex items-center gap-2.5">
+            <img src={logo} alt="Karaamo" className="h-9 w-9 rounded-full object-cover" />
+            <div>
+              <p className="font-[var(--font-display)] text-sm font-semibold">KARAAMO</p>
+              <p className="text-xs text-cream/40">Admin Dashboard</p>
+            </div>
           </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            aria-label="Xir menu-ga"
+            className="text-cream/60 md:hidden"
+          >
+            <X size={20} />
+          </button>
         </div>
 
-        <nav className="mt-4 flex-1 space-y-1 px-3">
+        <nav className="mt-4 flex-1 space-y-1 overflow-y-auto px-3">
           {tabs.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
-              onClick={() => setActive(id)}
+              onClick={() => selectTab(id)}
               className={`flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-sm transition-colors ${
                 active === id ? "bg-gold-500 text-navy-950 font-medium" : "text-cream/70 hover:bg-navy-800"
               }`}
@@ -77,8 +131,8 @@ export default function AdminDashboard() {
         </div>
       </aside>
 
-      <main className="flex-1 overflow-y-auto p-8">
-        <h1 className="font-[var(--font-display)] text-2xl font-semibold text-navy-900">
+      <main className="min-w-0 flex-1 overflow-y-auto p-4 md:p-8">
+        <h1 className="font-[var(--font-display)] text-xl font-semibold text-navy-900 md:text-2xl">
           {tabs.find((t) => t.id === active)?.label}
         </h1>
 
