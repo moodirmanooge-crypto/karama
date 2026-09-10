@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { Menu, X, Lock, User } from "lucide-react";
 import logo from "../assets/logo.png";
 import { getUserSession } from "../lib/userSession";
@@ -15,6 +15,13 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const user = getUserSession();
+  const location = useLocation();
+  // Kaliya bogga Home ayaa leh hero navy ah oo ka dambeeya; boggagga kale
+  // (About/Contact/Registration/iwm) waxay ku bilaabmaan background cream ah,
+  // sidaa darteed Navbar-ku waa in uu mar walba solid yahay halkaas si qoraalka
+  // cream-ka ah aanu ku dhuuman background-ka cream ee gadaashiisa.
+  const isHome = location.pathname === "/";
+  const solid = scrolled || !isHome;
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -26,13 +33,13 @@ export default function Navbar() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 ${
-        scrolled ? "bg-navy-900/95 backdrop-blur shadow-lg shadow-navy-950/20" : "bg-transparent"
+        solid ? "bg-navy-900/95 backdrop-blur shadow-lg shadow-navy-950/20" : "bg-transparent"
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 py-3 md:px-8">
-        <NavLink to="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
-          <img src={logo} alt="Karaamo Construction Company" className="h-11 w-11 rounded-full object-cover" />
-          <span className="font-[var(--font-display)] text-lg font-semibold tracking-tight text-cream">
+        <NavLink to="/" className="flex min-w-0 shrink items-center gap-2.5" onClick={() => setOpen(false)}>
+          <img src={logo} alt="Karaamo Construction Company" className="h-10 w-10 shrink-0 rounded-full object-cover md:h-11 md:w-11" />
+          <span className="truncate font-[var(--font-display)] text-base font-semibold tracking-tight text-cream md:text-lg">
             KARAAMO
           </span>
         </NavLink>
@@ -71,7 +78,7 @@ export default function Navbar() {
         </div>
 
         <button
-          className="text-cream md:hidden"
+          className="shrink-0 text-cream md:hidden"
           onClick={() => setOpen((v) => !v)}
           aria-label={open ? "Xir menu-ga" : "Fur menu-ga"}
           aria-expanded={open}
