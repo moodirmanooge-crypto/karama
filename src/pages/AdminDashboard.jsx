@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, onSnapshot } from "firebase/firestore";
 import {
   PlusCircle,
   LayoutGrid,
@@ -12,6 +13,7 @@ import {
   Menu,
   X,
 } from "lucide-react";
+import { db, COLLECTIONS } from "../firebase";
 import { clearAdminSession, getAdminSession } from "../lib/adminSession";
 import AddLandForm from "../components/admin/AddLandForm";
 import LandsList from "../components/admin/LandsList";
@@ -34,8 +36,16 @@ export default function AdminDashboard() {
   const [active, setActive] = useState("add");
   const [refreshKey, setRefreshKey] = useState(0);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
   const navigate = useNavigate();
   const admin = getAdminSession();
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, COLLECTIONS.CONTACT_MESSAGES), (snap) => {
+      setUnreadMessages(snap.docs.filter((d) => !d.data().read).length);
+    });
+    return () => unsub();
+  }, []);
 
   const logout = () => {
     clearAdminSession();
@@ -100,11 +110,22 @@ export default function AdminDashboard() {
             <button
               key={id}
               onClick={() => selectTab(id)}
-              className={`flex w-full items-center gap-3 rounded-sm px-3 py-2.5 text-left text-sm transition-colors ${
+              className={`flex w-full items-center justify-between gap-3 rounded-sm px-3 py-2.5 text-left text-sm transition-colors ${
                 active === id ? "bg-gold-500 text-navy-950 font-medium" : "text-cream/70 hover:bg-navy-800"
               }`}
             >
-              <Icon size={16} /> {label}
+              <span className="flex items-center gap-3">
+                <Icon size={16} /> {label}
+              </span>
+              {id === "contact" && unreadMessages > 0 && (
+                <span
+                  className={`flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-semibold ${
+                    active === id ? "bg-navy-950 text-gold-400" : "bg-clay text-cream"
+                  }`}
+                >
+                  {unreadMessages}
+                </span>
+              )}
             </button>
           ))}
         </nav>

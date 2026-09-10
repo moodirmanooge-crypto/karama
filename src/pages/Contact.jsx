@@ -75,6 +75,7 @@ export default function Contact() {
         phone: form.phone.trim(),
         subject: form.subject,
         message: form.message.trim(),
+        read: false,
         createdAt: serverTimestamp(),
       });
       setStatus("done");
